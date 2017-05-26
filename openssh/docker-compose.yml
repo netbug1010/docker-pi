@@ -1,0 +1,9 @@
+openssh:
+  image: arm-openssh:latest
+  hostname: pi-docker
+  ports:
+    - "192.168.11.252:22:22"
+  volumes:
+    - ./keys:/root/.ssh/keys
+  restart: unless-stopped
+

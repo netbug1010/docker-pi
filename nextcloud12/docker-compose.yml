@@ -1,0 +1,44 @@
+db:
+  image: mariadb:latest
+  volumes:
+    - /opt/nextcloud/nc_data/db:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=passwd
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=nextcloud
+    - MYSQL_PASSWORD=passwd
+  restart: unless-stopped
+  ports:
+    - 192.168.11.253:3306:3306
+
+app:
+  image: nextcloud:latest
+  links:
+    - db:mysql-server             # If using MySQL
+    #- solr:solr                   # If using Nextant
+    #- redis:redis                 # If using Redis
+  environment:
+    - UID=1000
+    - GID=1000
+    - UPLOAD_MAX_SIZE=10G
+    - APC_SHM_SIZE=128M
+    - OPCACHE_MEM_SIZE=128
+    - CRON_PERIOD=15m
+    - TZ=America/Toronto
+    - ADMIN_USER=admin            # Don't set to configure through browser
+    - ADMIN_PASSWORD=admin        # Don't set to configure through browser
+    - DOMAIN=192.168.11.253
+    - DB_TYPE=mysql
+    - DB_NAME=nextcloud
+    - DB_USER=nextcloud
+    - DB_PASSWORD=passwd
+    - DB_HOST=mysql-server
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /opt/nextcloud/nc_data/data:/data
+    - /opt/nextcloud/nc_data/config:/config
+    - /opt/nextcloud/nc_data/apps:/apps2
+    - /opt/nextcloud/nc_data/themes:/nextcloud/themes
+  restart: unless-stopped
+  ports:
+    - 192.168.11.253:80:8888

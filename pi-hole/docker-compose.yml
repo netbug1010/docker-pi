@@ -1,0 +1,17 @@
+pihole:
+   #image: diginc/pi-hole:arm
+   image: pihole:latest
+   container_name: pihole
+   volumes:
+     - /etc/localtime:/etc/localtime:ro
+   ports:
+     - 192.168.11.250:53:53
+     - 192.168.11.250:53:53/udp
+     - 192.168.11.250:80:80
+   cap_add:
+     - NET_ADMIN
+   environment:
+     - ServerIP=192.168.11.250
+     - WEBPASSWORD=33552393
+   restart: unless-stopped
+

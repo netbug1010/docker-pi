@@ -1,0 +1,5 @@
+docker-compose
+pytest
+pytest-cov
+pytest-xdist
+testinfra==1.5.1

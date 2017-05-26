@@ -1,0 +1,42 @@
+#data:
+#  image: armhf/alpine
+#  volumes:
+#    - /mnt/nfs/zabbix:/repo
+
+db:
+  image: mariadb:latest
+  volumes: 
+    - /opt/zabbix/data:/var/lib/mysql
+  #ports:
+  #  - 192.168.11.251:3306:3306
+  restart: unless-stopped
+
+server:
+  image: zabbix-server:latest
+  ports:
+    - 192.168.11.250:10051:10051
+  links:
+    - db:mysql-server
+  external_links:
+    - zabbix_agent_1:piserver
+  environment:
+    - DB_SERVER_HOST=mysql-server
+    - MYSQL_ROOT_PASSWORD=passwd
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+  restart: unless-stopped
+
+web:
+  image: zabbix-web:latest
+  ports:
+    - 192.168.11.251:80:80
+  links:
+    - server:zabbix-server
+    - db:mysql-server
+  environment:
+    - TZ="America/Toronto"
+    - MYSQL_ROOT_PASSWORD=passwd
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+  restart: unless-stopped
+

@@ -1,0 +1,14 @@
+app:
+  image: phpmyadmin:latest
+  container_name: phpmyadmin
+  environment:
+    - PMA_ARBITRARY=1
+  external_links:
+    - zabbix_db_1:zabbix_db_1
+    - nextcloud_db_1:nextcloud_db_1
+  restart: unless-stopped
+  ports:
+    - 192.168.11.250:8080:80
+  volumes:
+    - /opt/phpmyadmin/data:/sessions
+

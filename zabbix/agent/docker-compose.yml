@@ -1,0 +1,11 @@
+agent:
+  image: zabbix-agent:latest
+  privileged: true
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/zabbix/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d
+  external_links:
+    - zabbix_server_1:zabbix-server
+  #ports:
+  #  - 192.168.11.250:10050:10050
+  restart: unless-stopped

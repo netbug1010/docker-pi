@@ -1,0 +1,13 @@
+db:
+  image: mariadb:0.2
+  volumes:
+    - $PWD/data:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=passwd
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=nextcloud
+    - MYSQL_PASSWORD=passwd
+  restart: unless-stopped
+  ports:
+    - 192.168.11.254:3306:3306
+
